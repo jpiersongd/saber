@@ -1,6 +1,7 @@
 # saber
 These scripts are part of a project to experiment with sound and motion. I wanted to produce a device that would sound a bit like a light saber when swung. 
-* analyzer.py takes in a wav file and produces a spectrum anaysis of the frequencies used in the wav
+* saber.wav and sun.wav are example sounds that I wanted to replicate
+* analyzer.py takes in a wav file and produces a spectrum anaysis of the frequencies used
 * soundonly.py creates the basic sound without any modifications
 * saber.py tempors the base sound based on motion measured by an Adafruit BNO055
 * pwmtest.py creates a tone on the buzzer pin 18
