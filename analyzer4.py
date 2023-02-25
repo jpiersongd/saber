@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from tabulate import tabulate
 
 # Open the WAV file
-filename = 'saber.wav'
+filename = 'sun.wav'
 with wave.open(filename, 'r') as wav_file:
 
     # Extract raw audio from the WAV file
