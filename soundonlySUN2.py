@@ -3,10 +3,10 @@ import pygame
 import math
 import numpy
 
-duration = 441
+duration = 500
 sample_rate = 44100
 num_samples = int(duration * sample_rate / 1000)
-silence_duration = 15  # in milliseconds
+silence_duration = 5  # in milliseconds
 silence_samples = int(silence_duration * sample_rate / 1000)
 
 # Initialize the audio
@@ -17,9 +17,9 @@ print("pygame mixer started")
 
 # Define the sound play function
 def play_sound(): 
-    volume = .3  
-    frequency1 = 63
-    frequency2 = 126
+    volume = .5 
+    frequency1 = 71.233
+    frequency2 = 128.86
     frequency3 = 0
     frequency4 = 0
     frequency5 = 0
@@ -57,54 +57,25 @@ def play_sound():
     #channel7.play(sound7, loops=-1)
     #channel8.play(sound8, loops=-1)
     time.sleep(duration)
-    #channel1.stop()
-    #channel2.stop()
+    channel1.stop()
+    time.sleep(duration)
+    channel2.stop()
 
 
 #Define the sound creation function
 def create_sound(frequency, volume):
-    duration = 500  # each tone lasts for 100 ms
-    sample_rate = 44100
-    num_samples = int(duration * sample_rate / 1000)
+
     
-    sound_data = []
+    sound_data = [0] * silence_samples
+    #sound_data = []
 
     for i in range(num_samples):
         t = float(i) / sample_rate
-        
-        # Generate a sine wave with a frequency of 0.1 Hz
-        # This will be used to modulate the main frequency
-        modulation_frequency = .01
-        modulation_wave = math.sin(modulation_frequency * t * 2 * math.pi)
-        
-        # Calculate the frequency of the main tone as the sum of the base frequency
-        # and a modulation amount that is proportional to the amplitude of the modulation wave
-        modulation_amount = 10  # adjust this value to control the degree of frequency modulation
-        main_frequency = frequency + (modulation_amount * modulation_wave)
-        
-        # Generate the sound sample for the current time step using the modulated frequency
-        sound_sample = float(volume * math.sin(main_frequency * t * 2 * math.pi))
-        
-        # Apply a fade-in and fade-out to the sound sample to reduce clicking
-        fade_in_duration = 0.01
-        fade_out_duration = 0.01
-        fade_in_samples = int(fade_in_duration * sample_rate)
-        fade_out_samples = int(fade_out_duration * sample_rate)
-        if i < fade_in_samples:
-            fade_factor = i / fade_in_samples
-        elif i >= num_samples - fade_out_samples:
-            fade_factor = (num_samples - i) / fade_out_samples
-        else:
-            fade_factor = 1.0
-        sound_sample *= fade_factor
-        
-        # Convert the sound sample to a 16-bit integer and add it to the sound data
-        sound_data.append(int(sound_sample * 32767))
-        
-    # Repeat the sound data to make a continuous sound
-    num_repeats = int(sample_rate * 1.0 / duration)  # repeat the tone every 1 second
-    sound_data *= num_repeats
-    
+        sound_sample = float(volume * math.sin(frequency * t * 2 * math.pi))
+        volume_factor = min(1, i / (num_samples * .1)) ** 0.5   #fades in/out to reduce clicking
+        sound_data.append(int(sound_sample * volume_factor * 32767))
+        sound_data += [0,0]  # add silence at end
+
     # Ensure that the length of sound_data is evenly divisible by 2
     while len(sound_data) % 2 != 0:
         sound_data.append(0)
@@ -113,7 +84,6 @@ def create_sound(frequency, volume):
     sound_array = numpy.reshape(sound_array, (-1, 2))
 
     return sound_array
-
 
 
 
