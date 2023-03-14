@@ -27,7 +27,7 @@ with wave.open(filename, 'r') as wav_file:
     magnitudes = np.abs(fft_signal)
 
     # Set the frequency range to display
-    x = 10  # Lower frequency limit
+    x = 0  # Lower frequency limit
     y = 300 # Upper frequency limit
     mask = (freqs > x) & (freqs < y)
     freqs_masked = freqs[mask]
